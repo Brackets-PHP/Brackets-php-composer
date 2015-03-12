@@ -1,0 +1,16 @@
+{
+    "name": "mackenza.php-composer",
+    "title": "PHP Composer",
+    "description": "Integration of Brackets with Composer to manage PHP projects and dependencies without leaving Brackets.  Mainly interacts with the composer.json file",
+    "homepage": "https://github.com/mackenza/php-composer",
+    "version": "0.0.1",
+    "author": {
+        "name": "Andrew MacKenzie",
+        "email": "a.mackenzie@gmail.com",
+        "url": "https://github.com/mackenza"
+    },
+    "license": "MIT",
+    "engines": {
+        "brackets": ">=1.0.0"
+    }
+}

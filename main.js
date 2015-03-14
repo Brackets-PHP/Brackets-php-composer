@@ -28,6 +28,39 @@ define(function (require, exports, module) {
     "use strict";
 
     // Brackets modules
-    var NLSStrings            = require("strings");
+    var InlineWidget            = brackets.getModule("editor/InlineWidget").InlineWidget,
+        EditorManager           = brackets.getModule("editor/EditorManager"),
+        ExtensionUtils          = brackets.getModule("utils/ExtensionUtils"),
+        NLSStrings              = require("strings");
 
+    var packageBrowserTemplate    = require("text!templates/packageBrowserTemplate.html");
+
+    function ComposerInlineEditor(hostEditor, pos) {
+        InlineWidget.call(this);
+
+        this.$htmlContent.addClass("package-browser-editor");
+        $(packageBrowserTemplate).appendTo(this.$htmlContent);
+
+        hostEditor.setInlineWidgetHeight(this, 100);
+    }
+
+    ComposerInlineEditor.prototype = Object.create(InlineWidget.prototype);
+    ComposerInlineEditor.prototype.constructor = ComposerInlineEditor;
+    ComposerInlineEditor.prototype.parentClass = InlineWidget.prototype;
+
+    function composerEditorProvider(hostEditor, pos) {
+        var composerInlineEditor = new ComposerInlineEditor(hostEditor, pos);
+
+        if (hostEditor.document.file._name === "composer.json") {
+            composerInlineEditor.load(hostEditor);
+            return new $.Deferred().resolve(composerInlineEditor);
+        } else {
+            return null;
+        }
+
+    }
+
+    ExtensionUtils.loadStyleSheet(module, "styles/styles.css");
+
+    EditorManager.registerInlineEditProvider(composerEditorProvider);
 });

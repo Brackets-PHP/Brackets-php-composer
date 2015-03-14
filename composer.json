@@ -1,0 +1,13 @@
+{
+    "require": {
+        "nikic/php-parser": "~1.0.0",
+        "symfony/finder": "2.6.*@dev",
+        "symfony/filesystem": "2.6.*@dev",
+        "egeloen/json-builder": "~1.0",
+        "nategood/commando": ">=0.2.6"
+    },
+    "autoload": {
+        "psr-4": {"PhpCodeHints\\": "lib/"}
+    },
+    "minimum-stability": "dev"
+}

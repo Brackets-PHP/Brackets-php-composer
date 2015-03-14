@@ -40,13 +40,15 @@ define(function (require, exports, module) {
 
         this.$htmlContent.addClass("package-browser-editor");
         $(packageBrowserTemplate).appendTo(this.$htmlContent);
-
-        hostEditor.setInlineWidgetHeight(this, 100);
     }
 
     ComposerInlineEditor.prototype = Object.create(InlineWidget.prototype);
     ComposerInlineEditor.prototype.constructor = ComposerInlineEditor;
     ComposerInlineEditor.prototype.parentClass = InlineWidget.prototype;
+
+    ComposerInlineEditor.prototype.onAdded = function () {
+        this.hostEditor.setInlineWidgetHeight(this, 100);
+    }
 
     function composerEditorProvider(hostEditor, pos) {
         var composerInlineEditor = new ComposerInlineEditor(hostEditor, pos);

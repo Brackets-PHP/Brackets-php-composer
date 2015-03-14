@@ -22,7 +22,7 @@
 */
 
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, regexp: true, indent: 4, maxerr: 50 */
-/*global define, brackets, window, $, Mustache, navigator */
+/*global define, brackets, $ */
 
 define(function (require, exports, module) {
     "use strict";
@@ -30,12 +30,12 @@ define(function (require, exports, module) {
     // Brackets modules
     var InlineWidget            = brackets.getModule("editor/InlineWidget").InlineWidget,
         EditorManager           = brackets.getModule("editor/EditorManager"),
-        ExtensionUtils          = brackets.getModule("utils/ExtensionUtils"),
-        NLSStrings              = require("strings");
+        ExtensionUtils          = brackets.getModule("utils/ExtensionUtils");
+        //NLSStrings              = require("strings");
 
     var packageBrowserTemplate    = require("text!templates/packageBrowserTemplate.html");
 
-    function ComposerInlineEditor(hostEditor, pos) {
+    function ComposerInlineEditor() {
         InlineWidget.call(this);
 
         this.$htmlContent.addClass("package-browser-editor");
@@ -48,7 +48,7 @@ define(function (require, exports, module) {
 
     ComposerInlineEditor.prototype.onAdded = function () {
         this.hostEditor.setInlineWidgetHeight(this, 100);
-    }
+    };
 
     function composerEditorProvider(hostEditor, pos) {
         var composerInlineEditor = new ComposerInlineEditor(hostEditor, pos);

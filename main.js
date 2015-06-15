@@ -39,7 +39,7 @@ define(function (require, exports, module) {
         InlineWidget.call(this);
 
         this.$htmlContent.addClass("package-browser-editor");
-        this.$htmlContent.append(Mustache.render(packageBrowserTemplate, {packagistData: "test"}));
+        this.$htmlContent.append(Mustache.render(packageBrowserTemplate, {packagistData: "composer.json: require:"}));
     }
 
     ComposerInlineEditor.prototype = Object.create(InlineWidget.prototype);
@@ -53,7 +53,7 @@ define(function (require, exports, module) {
     function composerEditorProvider(hostEditor, pos) {
         var composerInlineEditor = new ComposerInlineEditor(hostEditor, pos);
 
-        if (hostEditor.document.file._name === "composer.json") {
+        if (hostEditor.document.file._name === "composer.json" && hostEditor.) {
             composerInlineEditor.load(hostEditor);
             return new $.Deferred().resolve(composerInlineEditor);
         } else {

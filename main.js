@@ -22,7 +22,7 @@
 */
 
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, regexp: true, indent: 4, maxerr: 50 */
-/*global define, brackets, $ */
+/*global define, brackets, $, Mustache */
 
 define(function (require, exports, module) {
     "use strict";
@@ -39,7 +39,7 @@ define(function (require, exports, module) {
         InlineWidget.call(this);
 
         this.$htmlContent.addClass("package-browser-editor");
-        $(packageBrowserTemplate).appendTo(this.$htmlContent);
+        this.$htmlContent.append(Mustache.render(packageBrowserTemplate, {packagistData: "test"}));
     }
 
     ComposerInlineEditor.prototype = Object.create(InlineWidget.prototype);

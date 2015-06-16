@@ -30,16 +30,18 @@ define(function (require, exports, module) {
     // Brackets modules
     var InlineWidget            = brackets.getModule("editor/InlineWidget").InlineWidget,
         EditorManager           = brackets.getModule("editor/EditorManager"),
-        ExtensionUtils          = brackets.getModule("utils/ExtensionUtils");
-        //NLSStrings              = require("strings");
+        ExtensionUtils          = brackets.getModule("utils/ExtensionUtils"),
+        TokenUtils              = brackets.getModule("utils/TokenUtils");
 
-    var packageBrowserTemplate    = require("text!templates/packageBrowserTemplate.html");
+    var packageBrowserTemplate  = require("text!templates/packageBrowserTemplate.html");
+
+    var currentSection = "";
 
     function ComposerInlineEditor() {
         InlineWidget.call(this);
 
-        this.$htmlContent.addClass("package-browser-editor");
-        this.$htmlContent.append(Mustache.render(packageBrowserTemplate, {packagistData: "composer.json: require:"}));
+        //this.$htmlContent.addClass("package-browser-editor");
+        //this.$htmlContent.append(Mustache.render(packageBrowserTemplate, {packagistData: "composer.json: " + currentSection}));
     }
 
     ComposerInlineEditor.prototype = Object.create(InlineWidget.prototype);
@@ -51,9 +53,15 @@ define(function (require, exports, module) {
     };
 
     function composerEditorProvider(hostEditor, pos) {
-        var composerInlineEditor = new ComposerInlineEditor(hostEditor, pos);
+        var composerInlineEditor = new ComposerInlineEditor(hostEditor, pos),
+            currentToken = TokenUtils.getInitialContext(hostEditor._codeMirror, pos).token,
+            sections = ['"require":', '"require-dev":', '"suggest":', '"conflict":', '"replace":', '"provide":'];
+        var validSection = sections.indexOf(currentToken.string + ":");
 
-        if (hostEditor.document.file._name === "composer.json" && hostEditor.) {
+        if (hostEditor.document.file._name === "composer.json" && validSection !== -1) {
+            currentSection = sections[validSection];
+            composerInlineEditor.$htmlContent.addClass("package-browser-editor");
+            composerInlineEditor.$htmlContent.append(Mustache.render(packageBrowserTemplate, {packagistData: currentSection}));
             composerInlineEditor.load(hostEditor);
             return new $.Deferred().resolve(composerInlineEditor);
         } else {

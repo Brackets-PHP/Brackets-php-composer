@@ -59,11 +59,11 @@ define(function (require, exports, module) {
             currentSection = sections[validSection];
             composerInlineEditor.$htmlContent.addClass("package-browser-editor");
             $.get("https://packagist.org/feeds/package.vlucas/spot2.rss", function(data) {
-                var xmlDoc = $.parseXML(data),
+                var xmlDoc = data,
                     $xml = $(xmlDoc),
-                    $channel = $xml.find("channel");
-                console.log($channel.text());
-                }
+                    $title = $xml.find("title");
+                console.log($title.first().text());
+                }, "xml"
             );
             composerInlineEditor.$htmlContent.append(Mustache.render(packageBrowserTemplate, {packagistData: currentSection}));
             composerInlineEditor.load(hostEditor);

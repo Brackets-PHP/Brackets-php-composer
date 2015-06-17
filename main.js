@@ -35,7 +35,8 @@ define(function (require, exports, module) {
 
     var packageBrowserTemplate  = require("text!templates/packageBrowserTemplate.html");
 
-    var currentSection = "";
+    var currentSection = "",
+        pkgRegex = /"([A-Z0-9-_]*\/[A-Z0-9-_]*)":\s"([\,<>=-~*.@A-Z0-9]*)"/i;
 
     function ComposerInlineEditor() {
         InlineWidget.call(this);

@@ -39,9 +39,6 @@ define(function (require, exports, module) {
 
     function ComposerInlineEditor() {
         InlineWidget.call(this);
-
-        //this.$htmlContent.addClass("package-browser-editor");
-        //this.$htmlContent.append(Mustache.render(packageBrowserTemplate, {packagistData: "composer.json: " + currentSection}));
     }
 
     ComposerInlineEditor.prototype = Object.create(InlineWidget.prototype);
@@ -61,6 +58,13 @@ define(function (require, exports, module) {
         if (hostEditor.document.file._name === "composer.json" && validSection !== -1) {
             currentSection = sections[validSection];
             composerInlineEditor.$htmlContent.addClass("package-browser-editor");
+            $.get("https://packagist.org/feeds/package.vlucas/spot2.rss", function(data) {
+                var xmlDoc = $.parseXML(data),
+                    $xml = $(xmlDoc),
+                    $channel = $xml.find("channel");
+                console.log($channel.text());
+                }
+            );
             composerInlineEditor.$htmlContent.append(Mustache.render(packageBrowserTemplate, {packagistData: currentSection}));
             composerInlineEditor.load(hostEditor);
             return new $.Deferred().resolve(composerInlineEditor);

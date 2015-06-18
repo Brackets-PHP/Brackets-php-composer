@@ -52,20 +52,23 @@ define(function (require, exports, module) {
 
     function composerEditorProvider(hostEditor, pos) {
         var composerInlineEditor = new ComposerInlineEditor(hostEditor, pos),
-            currentToken = TokenUtils.getInitialContext(hostEditor._codeMirror, pos).token,
-            sections = ['"require":', '"require-dev":', '"suggest":', '"conflict":', '"replace":', '"provide":'];
-        var validSection = sections.indexOf(currentToken.string + ":");
+            currentLine = hostEditor.document.getLine(pos.line),
+            packageMatch = pkgRegex.exec(currentLine);
 
-        if (hostEditor.document.file._name === "composer.json" && validSection !== -1) {
-            currentSection = sections[validSection];
+        var thePackage = packageMatch[1],
+            theVersion = packageMatch[2];
+
+        packageMatch.lastIndex = 0;
+
+        if (hostEditor.document.file._name === "composer.json") {
             composerInlineEditor.$htmlContent.addClass("package-browser-editor");
-            $.get("https://packagist.org/feeds/package.vlucas/spot2.rss", function(data) {
+            $.get("https://packagist.org/feeds/package." + thePackage + ".rss", function (data) {
                 var xmlDoc = data,
                     $xml = $(xmlDoc),
                     $title = $xml.find("title");
                 console.log($title.first().text());
-                }, "xml"
-            );
+            }, "xml"
+                );
             composerInlineEditor.$htmlContent.append(Mustache.render(packageBrowserTemplate, {packagistData: currentSection}));
             composerInlineEditor.load(hostEditor);
             return new $.Deferred().resolve(composerInlineEditor);

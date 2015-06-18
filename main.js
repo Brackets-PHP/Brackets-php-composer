@@ -35,50 +35,37 @@ define(function (require, exports, module) {
 
     var packageBrowserTemplate  = require("text!templates/packageBrowserTemplate.html");
 
-    var currentSection = "",
+    var InlinePackageViewer = require("InlinePackageViewer"),
         pkgRegex = /"([A-Z0-9-_]*\/[A-Z0-9-_]*)":\s"([\,<>=-~*.@A-Z0-9]*)"/i;
 
-    function ComposerInlineEditor() {
-        InlineWidget.call(this);
-    }
-
-    ComposerInlineEditor.prototype = Object.create(InlineWidget.prototype);
-    ComposerInlineEditor.prototype.constructor = ComposerInlineEditor;
-    ComposerInlineEditor.prototype.parentClass = InlineWidget.prototype;
-
-    ComposerInlineEditor.prototype.onAdded = function () {
-        this.hostEditor.setInlineWidgetHeight(this, 100);
-    };
-
-    function composerEditorProvider(hostEditor, pos) {
-        var composerInlineEditor = new ComposerInlineEditor(hostEditor, pos),
-            currentLine = hostEditor.document.getLine(pos.line),
-            packageMatch = pkgRegex.exec(currentLine);
-
-        var thePackage = packageMatch[1],
-            theVersion = packageMatch[2];
-
-        packageMatch.lastIndex = 0;
-
-        if (hostEditor.document.file._name === "composer.json") {
-            composerInlineEditor.$htmlContent.addClass("package-browser-editor");
-            $.get("https://packagist.org/feeds/package." + thePackage + ".rss", function (data) {
-                var xmlDoc = data,
-                    $xml = $(xmlDoc),
-                    $title = $xml.find("title");
-                console.log($title.first().text());
-            }, "xml"
-                );
-            composerInlineEditor.$htmlContent.append(Mustache.render(packageBrowserTemplate, {packagistData: currentSection}));
-            composerInlineEditor.load(hostEditor);
-            return new $.Deferred().resolve(composerInlineEditor);
+    function inlinePackageBrowserProvider(hostEditor, pos) {
+        // Only provide image viewer if the selection is within a single line
+        var sel = hostEditor.getSelection(false);
+        if (sel.start.line !== sel.end.line) {
+            return null;
+        }
+        var currentLine = hostEditor.document.getLine(pos.line);
+        if (pkgRegex.test(currentLine)) {
+            var packageMatch = pkgRegex.exec(currentLine),
+                thePackage = packageMatch[1],
+                theVersion = packageMatch[2];
         } else {
             return null;
         }
 
+        if (hostEditor.document.file._name !== "composer.json") {
+            return null;
+        }
+        var result = new $.Deferred();
+
+        var packageViewer = new InlinePackageViewer(thePackage, theVersion);
+        packageViewer.load(hostEditor);
+
+        result.resolve(packageViewer);
+
+        return result.promise();
+
     }
 
-    ExtensionUtils.loadStyleSheet(module, "styles/styles.css");
-
-    EditorManager.registerInlineEditProvider(composerEditorProvider);
+    EditorManager.registerInlineEditProvider(inlinePackageBrowserProvider);
 });

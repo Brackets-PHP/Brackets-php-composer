@@ -49,14 +49,18 @@ define(function (require, exports, module) {
 
     InlinePackageViewer.prototype.load = function (hostEditor) {
         InlinePackageViewer.prototype.parentClass.load.apply(this, arguments);
-
+        var packageDescription = "";
         this.$wrapperDiv = $(inlinePackageTemplate);
         $.get("https://packagist.org/feeds/package." + this.currentPackage + ".rss", function (data) {
-
+            var $packageData = $(data);
+            var $packageDescription = $packageData.find("description").first();
+            packageDescription = $packageDescription.text();
+            console.log(packageDescription);
         }, "xml"
                 );
-        this.$htmlContent.append(Mustache.render(inlinePackageTemplate, {packagistData: this.currentPackage}));
-        //this.$htmlContent.click(this.close.bind(this));
+        console.log(packageDescription);
+        this.$htmlContent.append(Mustache.render(inlinePackageTemplate, {packagistData: this.currentPackage,
+                                                                         packageDesc: packageDescription}));
     };
 
     InlinePackageViewer.prototype.onAdded = function () {
@@ -65,7 +69,7 @@ define(function (require, exports, module) {
     };
 
     InlinePackageViewer.prototype._sizeEditorToContent = function () {
-        this.hostEditor.setInlineWidgetHeight(this, this.$wrapperDiv.height() + 20, true);
+        this.hostEditor.setInlineWidgetHeight(this, this.$wrapperDiv.height() + 400, true);
     };
 
     module.exports = InlinePackageViewer;

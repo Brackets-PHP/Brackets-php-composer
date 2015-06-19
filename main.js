@@ -36,9 +36,11 @@ define(function (require, exports, module) {
     var packageBrowserTemplate  = require("text!templates/packageBrowserTemplate.html");
 
     var InlinePackageViewer = require("InlinePackageViewer"),
-        pkgRegex = /"([A-Z0-9-_]*\/[A-Z0-9-_]*)":\s"([\,<>=-~*.@A-Z0-9]*)"/i;
+        pkgRegex = /"([A-Z0-9-_]*\/[A-Z0-9-_]*)":\s"([\,<>=-~*.@A-Z0-9 ]*)"/i;
 
     function inlinePackageBrowserProvider(hostEditor, pos) {
+        var thePackage = "",
+            theVersion = "";
         // Only provide image viewer if the selection is within a single line
         var sel = hostEditor.getSelection(false);
         if (sel.start.line !== sel.end.line) {
@@ -46,9 +48,9 @@ define(function (require, exports, module) {
         }
         var currentLine = hostEditor.document.getLine(pos.line);
         if (pkgRegex.test(currentLine)) {
-            var packageMatch = pkgRegex.exec(currentLine),
-                thePackage = packageMatch[1],
-                theVersion = packageMatch[2];
+            var packageMatch = pkgRegex.exec(currentLine);
+            thePackage = packageMatch[1];
+            theVersion = packageMatch[2];
         } else {
             return null;
         }

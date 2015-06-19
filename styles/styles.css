@@ -1,4 +1,11 @@
-.package-browser-editor .package-browser-row {
+.package-browser-editor .package-browser {
     margin: 12px 15px 5px 40px;
     font-size: 12px;
+}
+
+.package-description {
+    float: left;
+    display: block;
+    font-size: 10px;
+    position: relative;
 }

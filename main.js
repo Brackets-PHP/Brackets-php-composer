@@ -59,26 +59,12 @@ define(function (require, exports, module) {
             return null;
         }
         $.ajax({
-            url: "https://packagist.org/feeds/package." + thePackage + ".rss",
-            dataType: "xml"
+            url: "https://packagist.org/packages/" + thePackage + ".json",
+            dataType: "json"
         })
             .done(function (data) {
-                var $packageData = $(data).find("item").first(),
-                    $packageDescription = $packageData.find("description"),
-                    packageDescription = $packageDescription.text(),
-                    $packageTitle = $packageData.find("title"),
-                    packageTitle = $packageTitle.text();
-                var packageMap = {
-                    thePackage: thePackage,
-                    theVersion: theVersion,
-                    packageDescription: packageDescription,
-                    packageTitle: packageTitle
-                };
-
-                var packageViewer = new InlinePackageViewer(packageMap);
-
+                var packageViewer = new InlinePackageViewer(data, theVersion);
                 packageViewer.load(hostEditor);
-
                 result.resolve(packageViewer);
             })
             .fail(function () {

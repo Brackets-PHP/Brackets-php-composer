@@ -36,11 +36,9 @@ define(function (require, exports, module) {
     var currentPackage = "";
     var currentVersion = "";
 
-    function InlinePackageViewer(packageMap) {
-        this.currentPackage = packageMap.thePackage;
-        this.currentVersion = packageMap.theVersion;
-        this.packageDescription = packageMap.packageDescription;
-        this.packageTitle = packageMap.packageTitle;
+    function InlinePackageViewer(packageMap, theVersion) {
+        this.packageMap = packageMap;
+        this.theVersion = theVersion;
         InlineWidget.call(this);
     }
     InlinePackageViewer.prototype = Object.create(InlineWidget.prototype);
@@ -54,8 +52,10 @@ define(function (require, exports, module) {
     InlinePackageViewer.prototype.load = function (hostEditor) {
         InlinePackageViewer.prototype.parentClass.load.apply(this, arguments);
         ExtensionUtils.loadStyleSheet(module, "styles/styles.css");
-        this.$htmlContent.append(Mustache.render(inlinePackageTemplate, {packageTitle: this.packageTitle,
-                                                                         packageDescription: this.packageDescription}));
+        console.log(this.packageDescription);
+        this.$htmlContent.append(Mustache.render(inlinePackageTemplate, {packageTitle: this.packageMap.package.description,
+                                                                         packageDescription: this.packageMap.package.name,
+                                                                        versionFilter: this.theVersion}));
     };
 
     InlinePackageViewer.prototype.onAdded = function () {

@@ -28,16 +28,19 @@ define(function (require, exports, module) {
     'use strict';
 
     // Load Brackets modules
-    var InlineWidget        = brackets.getModule("editor/InlineWidget").InlineWidget;
+    var InlineWidget        = brackets.getModule("editor/InlineWidget").InlineWidget,
+        ExtensionUtils          = brackets.getModule("utils/ExtensionUtils");
 
     // Load tempalte
     var inlinePackageTemplate = require("text!templates/packageBrowserTemplate.html");
     var currentPackage = "";
     var currentVersion = "";
 
-    function InlinePackageViewer(currentPkg, currentVer) {
-        currentPackage = currentPkg;
-        currentVersion = currentVer;
+    function InlinePackageViewer(packageMap) {
+        this.currentPackage = packageMap.thePackage;
+        this.currentVersion = packageMap.theVersion;
+        this.packageDescription = packageMap.packageDescription;
+        this.packageTitle = packageMap.packageTitle;
         InlineWidget.call(this);
     }
     InlinePackageViewer.prototype = Object.create(InlineWidget.prototype);
@@ -47,24 +50,12 @@ define(function (require, exports, module) {
     InlinePackageViewer.prototype.currentPackage = null;
     InlinePackageViewer.prototype.currentVersion = null;
     InlinePackageViewer.prototype.$wrapperDiv = null;
-    InlinePackageViewer.prototype.$image = null;
 
     InlinePackageViewer.prototype.load = function (hostEditor) {
         InlinePackageViewer.prototype.parentClass.load.apply(this, arguments);
-        $.ajax({
-            url: "https://packagist.org/feeds/package." + this.currentPackage + ".rss",
-            dataType: "xml"
-        })
-            .done(function (data) {
-                var $packageData = $(data);
-                var $packageDescription = $packageData.find("description").first();
-                $(inlinePackageTemplate).$htmlContent.append(Mustache.render(inlinePackageTemplate, {packagistData: currentPackage,
-                                                                         packageDesc: $packageDescription.text()}));
-            })
-            .fail(function () {
-                $(inlinePackageTemplate).$htmlContent.append(Mustache.render(inlinePackageTemplate, {packagistData: currentPackage,
-                                                                         packageDesc: "Error loading package from Packagist"}));
-            });
+        ExtensionUtils.loadStyleSheet(module, "styles/styles.css");
+        this.$htmlContent.append(Mustache.render(inlinePackageTemplate, {packageTitle: this.packageTitle,
+                                                                         packageDescription: this.packageDescription}));
     };
 
     InlinePackageViewer.prototype.onAdded = function () {
@@ -73,7 +64,7 @@ define(function (require, exports, module) {
     };
 
     InlinePackageViewer.prototype._sizeEditorToContent = function () {
-        this.hostEditor.setInlineWidgetHeight(this, $(inlinePackageTemplate).height() + 20, true);
+        this.hostEditor.setInlineWidgetHeight(this, 200, true);
     };
 
     module.exports = InlinePackageViewer;

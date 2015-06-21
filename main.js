@@ -30,7 +30,6 @@ define(function (require, exports, module) {
     // Brackets modules
     var InlineWidget            = brackets.getModule("editor/InlineWidget").InlineWidget,
         EditorManager           = brackets.getModule("editor/EditorManager"),
-        ExtensionUtils          = brackets.getModule("utils/ExtensionUtils"),
         TokenUtils              = brackets.getModule("utils/TokenUtils");
 
     var packageBrowserTemplate  = require("text!templates/packageBrowserTemplate.html");
@@ -41,6 +40,7 @@ define(function (require, exports, module) {
     function inlinePackageBrowserProvider(hostEditor, pos) {
         var thePackage = "",
             theVersion = "";
+        var result = new $.Deferred();
         // Only provide image viewer if the selection is within a single line
         var sel = hostEditor.getSelection(false);
         if (sel.start.line !== sel.end.line) {
@@ -58,16 +58,33 @@ define(function (require, exports, module) {
         if (hostEditor.document.file._name !== "composer.json") {
             return null;
         }
-        var result = new $.Deferred();
+        $.ajax({
+            url: "https://packagist.org/feeds/package." + thePackage + ".rss",
+            dataType: "xml"
+        })
+            .done(function (data) {
+                var $packageData = $(data).find("item").first(),
+                    $packageDescription = $packageData.find("description"),
+                    packageDescription = $packageDescription.text(),
+                    $packageTitle = $packageData.find("title"),
+                    packageTitle = $packageTitle.text();
+                var packageMap = {
+                    thePackage: thePackage,
+                    theVersion: theVersion,
+                    packageDescription: packageDescription,
+                    packageTitle: packageTitle
+                };
 
-        var packageViewer = new InlinePackageViewer(thePackage, theVersion);
-        packageViewer.load(hostEditor);
+                var packageViewer = new InlinePackageViewer(packageMap);
 
-        result.resolve(packageViewer);
+                packageViewer.load(hostEditor);
 
+                result.resolve(packageViewer);
+            })
+            .fail(function () {
+                return "Error loading Package information from Packagist";
+            });
         return result.promise();
-
     }
-
     EditorManager.registerInlineEditProvider(inlinePackageBrowserProvider);
 });

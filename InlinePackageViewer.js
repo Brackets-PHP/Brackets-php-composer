@@ -28,8 +28,7 @@ define(function (require, exports, module) {
     'use strict';
 
     // Load Brackets modules
-    var InlineWidget        = brackets.getModule("editor/InlineWidget").InlineWidget,
-        ExtensionUtils          = brackets.getModule("utils/ExtensionUtils");
+    var InlineWidget        = brackets.getModule("editor/InlineWidget").InlineWidget;
 
     // Load tempalte
     var inlinePackageTemplate = require("text!templates/packageBrowserTemplate.html");
@@ -45,17 +44,15 @@ define(function (require, exports, module) {
     InlinePackageViewer.prototype.constructor = InlinePackageViewer;
     InlinePackageViewer.prototype.parentClass = InlineWidget.prototype;
 
-    InlinePackageViewer.prototype.currentPackage = null;
-    InlinePackageViewer.prototype.currentVersion = null;
     InlinePackageViewer.prototype.$wrapperDiv = null;
 
     InlinePackageViewer.prototype.load = function (hostEditor) {
         InlinePackageViewer.prototype.parentClass.load.apply(this, arguments);
-        ExtensionUtils.loadStyleSheet(module, "styles/styles.css");
-        console.log(this.packageDescription);
-        this.$htmlContent.append(Mustache.render(inlinePackageTemplate, {packageTitle: this.packageMap.package.description,
-                                                                         packageDescription: this.packageMap.package.name,
-                                                                        versionFilter: this.theVersion}));
+        var html = Mustache.render(inlinePackageTemplate, {packageTitle: this.packageMap.package.name,
+                                                                         packageDescription: this.packageMap.package.description,
+                                                                        versionFilter: this.theVersion});
+        this.$wrapperDiv = $(html);
+        this.$htmlContent.append(this.$wrapperDiv);
     };
 
     InlinePackageViewer.prototype.onAdded = function () {
@@ -64,7 +61,7 @@ define(function (require, exports, module) {
     };
 
     InlinePackageViewer.prototype._sizeEditorToContent = function () {
-        this.hostEditor.setInlineWidgetHeight(this, 200, true);
+        this.hostEditor.setInlineWidgetHeight(this, this.$wrapperDiv.height() + 20, true);
     };
 
     module.exports = InlinePackageViewer;

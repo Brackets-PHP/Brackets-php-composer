@@ -1,4 +1,17 @@
-.inline-widget .package-browser {
+.package-browser {
     margin: 12px 15px 5px 40px;
-    font-size: 18px;
+    font-size: 14px;
+}
+.h1 {
+    font-size: 16px;
+    font-weight: bold;
+}
+.description {
+    margin: 0 0 15px 0;
+}
+.versions-info {
+    display: block;
+    float: right;
+    position: absolute;
+    margin: 0 0 15px 0;
 }

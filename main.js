@@ -30,7 +30,8 @@ define(function (require, exports, module) {
     // Brackets modules
     var InlineWidget            = brackets.getModule("editor/InlineWidget").InlineWidget,
         EditorManager           = brackets.getModule("editor/EditorManager"),
-        TokenUtils              = brackets.getModule("utils/TokenUtils");
+        TokenUtils              = brackets.getModule("utils/TokenUtils"),
+        ExtensionUtils          = brackets.getModule("utils/ExtensionUtils");
 
     var packageBrowserTemplate  = require("text!templates/packageBrowserTemplate.html");
 
@@ -72,5 +73,6 @@ define(function (require, exports, module) {
             });
         return result.promise();
     }
+    ExtensionUtils.loadStyleSheet(module, "styles/styles.css");
     EditorManager.registerInlineEditProvider(inlinePackageBrowserProvider);
 });

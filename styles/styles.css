@@ -1,6 +1,7 @@
 .package-browser {
     margin: 12px 15px 5px 40px;
     font-size: 14px;
+    float: left;
 }
 .h1 {
     font-size: 16px;
@@ -9,9 +10,12 @@
 .description {
     margin: 0 0 15px 0;
 }
-.versions-info {
-    display: block;
+.package-browser .versions-info {
     float: right;
-    position: absolute;
+    margin: 0 0 15px 20px;
+}
+.package-browser .general-info {
+    float: left;
+    width: 70%;
     margin: 0 0 15px 0;
 }

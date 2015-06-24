@@ -34,6 +34,7 @@ define(function (require, exports, module) {
         ExtensionUtils          = brackets.getModule("utils/ExtensionUtils");
 
     var packageBrowserTemplate  = require("text!templates/packageBrowserTemplate.html");
+    var semVer = require("lib/semver.browser");
 
     var InlinePackageViewer = require("InlinePackageViewer"),
         pkgRegex = /"([A-Z0-9-_]*\/[A-Z0-9-_]*)":\s"([\,<>=-~*.@A-Z0-9 ]*)"/i;
@@ -66,10 +67,13 @@ define(function (require, exports, module) {
             .done(function (data) {
                 var versions = data.package.versions;
                 var versionsArray = [];
+                var versionNameOnlyArray = [];
                 $.each(versions, function (key, val) {
                     versionsArray.push(val);
+                    versionNameOnlyArray.push(val.version);
                 });
-                console.log(versionsArray);
+                var maxVersion = semVer.maxSatisfying(versionNameOnlyArray, semVer.validRange(theVersion));
+                console.log(maxVersion);
                 data.package.versionFilter = theVersion;
                 data.package.versionsArray = versionsArray;
                 var packageViewer = new InlinePackageViewer(data);
@@ -81,6 +85,7 @@ define(function (require, exports, module) {
             });
         return result.promise();
     }
+
     ExtensionUtils.loadStyleSheet(module, "styles/styles.css");
     EditorManager.registerInlineEditProvider(inlinePackageBrowserProvider);
 });

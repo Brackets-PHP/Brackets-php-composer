@@ -47,11 +47,10 @@ define(function (require, exports, module) {
     InlinePackageViewer.prototype.$wrapperDiv = null;
 
     InlinePackageViewer.prototype.load = function (hostEditor) {
-        InlinePackageViewer.prototype.parentClass.load.apply(this, arguments);
-
         var html = Mustache.render(inlinePackageTemplate, this.packageMap);
         this.$wrapperDiv = $(html);
         this.$htmlContent.append(this.$wrapperDiv);
+        InlinePackageViewer.prototype.parentClass.load.apply(this, arguments);
     };
 
     InlinePackageViewer.prototype.onAdded = function () {

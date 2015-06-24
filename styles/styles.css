@@ -1,7 +1,18 @@
 .package-browser {
     margin: 12px 15px 5px 40px;
     font-size: 14px;
+    width: 100%;
     float: left;
+    cursor: auto;
+      -webkit-user-select: text;
+      -khtml-user-select: text;
+      -moz-user-select: text;
+      -ms-user-select: text;
+      -o-user-select: text;
+      user-select: text;
+}
+.js-prop-defn:focus {
+  outline: none;
 }
 .h1 {
     font-size: 16px;
@@ -10,19 +21,15 @@
 .description {
     margin: 0 0 15px 0;
 }
-.package-browser .versions-info {
+.general-info {
+    float: left;
+    width: 35%%;
+    margin: 0 0 15px 0;
+    word-wrap: break-word;
+}
+.versions-info {
     float: right;
     width: 50%;
     margin: 0 0 15px 20px;
-}
-.package-browser .general-info {
-    float: left;
-    width: 50%;
-    margin: 0 0 15px 0;
-}
-textarea {
-    display: block;
-    height: 150px;
-    float: left;
-    width: 100%;
+    word-wrap: break-word;
 }

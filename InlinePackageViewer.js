@@ -48,7 +48,6 @@ define(function (require, exports, module) {
 
     InlinePackageViewer.prototype.load = function (hostEditor) {
         InlinePackageViewer.prototype.parentClass.load.apply(this, arguments);
-        this.packageMap.versionFilter = this.theVersion;
 
         var html = Mustache.render(inlinePackageTemplate, this.packageMap);
         this.$wrapperDiv = $(html);

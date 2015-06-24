@@ -12,10 +12,17 @@
 }
 .package-browser .versions-info {
     float: right;
+    width: 50%;
     margin: 0 0 15px 20px;
 }
 .package-browser .general-info {
     float: left;
-    width: 70%;
+    width: 50%;
     margin: 0 0 15px 0;
+}
+textarea {
+    display: block;
+    height: 150px;
+    float: left;
+    width: 100%;
 }

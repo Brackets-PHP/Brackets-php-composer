@@ -7,9 +7,11 @@
         <span class="versionFilter">Current version filter: {{ versionFilter }}</span>
     </div>
     <div class="versions-info">
-        {{#.}}
-            {{version}}
-        {{/.}}
+        <textarea>
+        {{#versionsArray}}
+            {{version}} - {{time}}
+        {{/versionsArray}}
+        </textarea>
     </div>
 </div>
 

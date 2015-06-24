@@ -67,10 +67,12 @@ define(function (require, exports, module) {
                 var versions = data.package.versions;
                 var versionsArray = [];
                 $.each(versions, function (key, val) {
-                    versionsArray.push(key);
+                    versionsArray.push(val);
                 });
-
-                var packageViewer = new InlinePackageViewer(data, theVersion);
+                console.log(versionsArray);
+                data.package.versionFilter = theVersion;
+                data.package.versionsArray = versionsArray;
+                var packageViewer = new InlinePackageViewer(data);
                 packageViewer.load(hostEditor);
                 result.resolve(packageViewer);
             })

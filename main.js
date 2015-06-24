@@ -64,6 +64,12 @@ define(function (require, exports, module) {
             dataType: "json"
         })
             .done(function (data) {
+                var versions = data.package.versions;
+                var versionsArray = [];
+                $.each(versions, function (key, val) {
+                    versionsArray.push(key);
+                });
+
                 var packageViewer = new InlinePackageViewer(data, theVersion);
                 packageViewer.load(hostEditor);
                 result.resolve(packageViewer);

@@ -39,7 +39,6 @@ define(function (require, exports, module) {
         this.packageMap = packageMap.package;
         this.theVersion = theVersion;
         InlineWidget.call(this);
-        console.log(this.packageMap);
     }
     InlinePackageViewer.prototype = Object.create(InlineWidget.prototype);
     InlinePackageViewer.prototype.constructor = InlinePackageViewer;
@@ -50,6 +49,7 @@ define(function (require, exports, module) {
     InlinePackageViewer.prototype.load = function (hostEditor) {
         InlinePackageViewer.prototype.parentClass.load.apply(this, arguments);
         this.packageMap.versionFilter = this.theVersion;
+
         var html = Mustache.render(inlinePackageTemplate, this.packageMap);
         this.$wrapperDiv = $(html);
         this.$htmlContent.append(this.$wrapperDiv);

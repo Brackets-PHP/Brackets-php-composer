@@ -23,13 +23,13 @@
 }
 .general-info {
     float: left;
-    width: 35%%;
+    width: 55%;
     margin: 0 0 15px 0;
     word-wrap: break-word;
 }
 .versions-info {
     float: right;
-    width: 50%;
+    width: 40%;
     margin: 0 0 15px 20px;
     word-wrap: break-word;
 }

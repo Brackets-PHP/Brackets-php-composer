@@ -48,7 +48,12 @@ define(function (require, exports, module) {
 
     InlinePackageViewer.prototype.load = function (hostEditor) {
         var html = Mustache.render(inlinePackageTemplate, this.packageMap);
+        var maxSatisfying = this.packageMap.maxSatisfying;
+        console.log(maxSatisfying);
         this.$wrapperDiv = $(html);
+        this.$wrapperDiv.find("li").filter(function(index) {
+            return $(this).text() === maxSatisfying;
+        }).text(maxSatisfying + " <- currently matched").css("font-weight", "bold");
         this.$htmlContent.append(this.$wrapperDiv);
         InlinePackageViewer.prototype.parentClass.load.apply(this, arguments);
     };

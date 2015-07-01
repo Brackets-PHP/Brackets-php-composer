@@ -70,10 +70,12 @@ define(function (require, exports, module) {
                 var versionNameOnlyArray = [];
                 $.each(versions, function (key, val) {
                     versionsArray.push(val);
-                    versionNameOnlyArray.push(val.version);
+                    if (val.version !== "dev-master") {
+                        versionNameOnlyArray.push(val.version);
+                    }
                 });
-                var maxVersion = semVer.maxSatisfying(versionNameOnlyArray, semVer.validRange(theVersion));
-                console.log(maxVersion);
+                var maxSatisfying = semVer.maxSatisfying(versionNameOnlyArray, semVer.validRange(theVersion));
+                data.package.maxSatisfying = maxSatisfying;
                 data.package.versionFilter = theVersion;
                 data.package.versionsArray = versionsArray;
                 var packageViewer = new InlinePackageViewer(data);

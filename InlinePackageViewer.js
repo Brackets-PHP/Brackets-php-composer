@@ -54,6 +54,7 @@ define(function (require, exports, module) {
         this.$wrapperDiv.find("li").filter(function(index) {
             return $(this).text() === maxSatisfying;
         }).text(maxSatisfying + " <- currently matched").css("font-weight", "bold");
+        this.$wrapperDiv.find(".versionFilter").editable("http://www.teamgamer.com");
         this.$htmlContent.append(this.$wrapperDiv);
         InlinePackageViewer.prototype.parentClass.load.apply(this, arguments);
     };

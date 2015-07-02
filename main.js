@@ -39,6 +39,8 @@ define(function (require, exports, module) {
     var InlinePackageViewer = require("InlinePackageViewer"),
         pkgRegex = /"([A-Z0-9-_]*\/[A-Z0-9-_]*)":\s"([\,<>=-~*.@A-Z0-9 ]*)"/i;
 
+    require("lib/jquery.jeditable.mini");
+
     function inlinePackageBrowserProvider(hostEditor, pos) {
         var thePackage = "",
             theVersion = "";
@@ -70,7 +72,7 @@ define(function (require, exports, module) {
                 var versionNameOnlyArray = [];
                 $.each(versions, function (key, val) {
                     versionsArray.push(val);
-                    if (val.version !== "dev-master") {
+                    if (semVer.valid(val.version) != null) {
                         versionNameOnlyArray.push(val.version);
                     }
                 });

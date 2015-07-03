@@ -51,10 +51,13 @@ define(function (require, exports, module) {
         var maxSatisfying = this.packageMap.maxSatisfying;
         console.log(maxSatisfying);
         this.$wrapperDiv = $(html);
-        this.$wrapperDiv.find("li").filter(function(index) {
+        this.$wrapperDiv.find("li").filter(function (index) {
             return $(this).text() === maxSatisfying;
         }).text(maxSatisfying + " <- currently matched").css("font-weight", "bold");
-        this.$wrapperDiv.find(".versionFilter").editable("http://www.teamgamer.com", {width: 50});
+        this.$wrapperDiv.find(".versionFilter")
+            .editable(function (value, settings) {
+                return (value);
+            }, {width: 50});
         this.$htmlContent.append(this.$wrapperDiv);
         InlinePackageViewer.prototype.parentClass.load.apply(this, arguments);
     };
